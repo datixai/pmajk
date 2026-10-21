@@ -1,0 +1,4 @@
+Contact: mailto:contact@ajkpm.gov.pk
+Expires: 2027-10-21T00:00:00.000Z
+Preferred-Languages: en, ur
+Policy: Please report security problems privately to the address above. Do not test against the live site without written permission.

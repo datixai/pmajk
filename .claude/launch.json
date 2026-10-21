@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ajk-pm-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "D:/AJK-PM-Website", "run", "dev", "--", "-p", "3250"],
+      "port": 3250
+    }
+  ]
+}

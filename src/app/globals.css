@@ -1,0 +1,201 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-paper: var(--paper);
+  --color-ivory: var(--ivory);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-snow: var(--snow);
+  --color-pine-975: #03170e;
+  --color-pine-950: #052215;
+  --color-pine-900: #08331f;
+  --color-pine-800: #0b4429;
+  --color-pine-700: #0f5a36;
+  --color-pine-600: #147146;
+  --color-pine-500: #1c8a57;
+  --color-pine-100: #dcefe3;
+  --color-pine-50: #eef7f1;
+  --color-gold: #c9a45c;
+  --color-gold-300: #e2c88f;
+  --color-gold-600: #a8823a;
+  --color-gold-50: #faf4e6;
+  --color-saffron: #f2a516;
+  --color-chinar: #c8431a;
+  --color-chinar-700: #9f3010;
+  --color-chinar-50: #fdebe3;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-urdu: var(--font-nastaliq), serif;
+}
+
+:root {
+  --paper: #f8f5ee;
+  --ivory: #fffdf8;
+  --snow: #ffffff;
+  --ink: #12201a;
+  --muted: #5b6a61;
+  --line: #e6dfcf;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+  ::selection {
+    background: #c9a45c55;
+  }
+  :focus-visible {
+    outline: 3px solid #c9a45c;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@utility container-pm {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+}
+
+@utility eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Faint chinar texture for dark bands */
+.bg-chinar-pattern {
+  background-image: url("/chinar-leaf.svg");
+  background-size: 120px;
+  background-repeat: repeat;
+}
+
+/* Fine gold rule used around headings and ornaments */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a45c, transparent);
+}
+
+/* Soft glow that frames the portrait in the hero */
+.portrait-halo {
+  background: radial-gradient(closest-side, rgba(201, 164, 92, 0.32), rgba(201, 164, 92, 0.08) 62%, transparent 74%);
+}
+
+/* Landscape backdrops cross-fade slowly behind the hero */
+@keyframes drift {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+.hero-slide {
+  opacity: 0;
+  animation: drift 24s ease-out infinite alternate;
+  transition: opacity 2.4s ease;
+}
+.hero-slide[data-active="true"] {
+  opacity: 1;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes slowspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-slowspin {
+  animation: slowspin 120s linear infinite;
+}
+
+/* Long-form text */
+.prose-pm {
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  color: #24332b;
+}
+.prose-pm > * + * {
+  margin-top: 1.1em;
+}
+.prose-pm h2 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1.25;
+  color: #08331f;
+  margin-top: 2em;
+  font-weight: 500;
+}
+.prose-pm ul {
+  padding-left: 0;
+  list-style: none;
+}
+.prose-pm li {
+  position: relative;
+  padding-left: 1.6em;
+  margin-top: 0.6em;
+}
+.prose-pm li::before {
+  content: "";
+  position: absolute;
+  left: 0.2em;
+  top: 0.72em;
+  width: 0.5em;
+  height: 0.5em;
+  background: #c9a45c;
+  transform: rotate(45deg);
+}
+.prose-pm.drop-cap > p:first-child::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 3.6em;
+  line-height: 0.9;
+  padding: 0.08em 0.12em 0 0;
+  color: #0b4429;
+}
