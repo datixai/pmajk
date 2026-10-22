@@ -18,12 +18,17 @@ async function load(): Promise<DB> {
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== "ENOENT") throw err;
     const seed = await fs.readFile(SEED, "utf8");
-    await fs.writeFile(CONTENT, seed, "utf8");
+    try {
+      await fs.writeFile(CONTENT, seed, "utf8");
+    } catch {
+      // Read-only hosting (e.g. Vercel): serve the seed content as is.
+    }
     return JSON.parse(seed) as DB;
   }
 }
 
 async function save(db: DB) {
+  if (process.env.VERCEL) throw new Error("Saving is disabled on this demo deployment. Run the site locally to edit content.");
   const tmp = `${CONTENT}.${process.pid}.tmp`;
   await fs.writeFile(tmp, JSON.stringify(db, null, 1), "utf8");
   await fs.rename(tmp, CONTENT);

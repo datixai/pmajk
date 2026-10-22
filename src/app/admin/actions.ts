@@ -64,7 +64,7 @@ export async function login(_prev: FormState, form: FormData): Promise<FormState
     if (!verifyTotp(pending.totpSecret, otp)) {
       noteFailure(pending.email);
       noteFailure(`ip:${ip}`);
-      await mutate((db) => audit(db, pending.email, "Failed two-factor code", ip));
+      await mutate((db) => audit(db, pending.email, "Failed two-factor code", ip)).catch(() => {});
       return { needCode: true, error: "That code is not correct. Use the current code from your authenticator app." };
     }
     await clearPending2fa();
@@ -78,7 +78,7 @@ export async function login(_prev: FormState, form: FormData): Promise<FormState
   const user = await checkCredentials(email, password);
   if (!user) {
     noteFailure(`ip:${ip}`);
-    await mutate((db) => audit(db, email, "Failed sign-in", ip));
+    await mutate((db) => audit(db, email, "Failed sign-in", ip)).catch(() => {});
     return { error: "Incorrect email or password." };
   }
   if (user.totpSecret) {
@@ -91,8 +91,9 @@ export async function login(_prev: FormState, form: FormData): Promise<FormState
 async function finishLogin(user: User, ip: string): Promise<FormState> {
   clearFailures(user.email);
   await createSession(user);
-  await updateUser(user.id, (u) => (u.lastLoginAt = new Date().toISOString()));
-  await mutate((db) => audit(db, user.email, "Signed in", ip));
+  // Logging must not block sign-in on read-only demo hosting.
+  await updateUser(user.id, (u) => (u.lastLoginAt = new Date().toISOString())).catch(() => {});
+  await mutate((db) => audit(db, user.email, "Signed in", ip)).catch(() => {});
   redirect("/admin");
 }
 

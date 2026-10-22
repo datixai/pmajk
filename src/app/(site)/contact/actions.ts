@@ -27,8 +27,12 @@ export async function sendMessage(_prev: ContactState, form: FormData): Promise<
   recent.set(ip, [...hits, now]);
 
   const at = new Date().toISOString();
-  await mutate((db) => {
-    db.messages.unshift({ id: randomUUID(), name, email, phone, subject, message, read: false, createdAt: at, updatedAt: at });
-  });
+  try {
+    await mutate((db) => {
+      db.messages.unshift({ id: randomUUID(), name, email, phone, subject, message, read: false, createdAt: at, updatedAt: at });
+    });
+  } catch {
+    return { ok: false, error: "Messages cannot be sent from this demo. Please use the email address or phone number on this page." };
+  }
   return { ok: true };
 }

@@ -15,6 +15,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
+  // Bundle the seed content with the server functions (read-only hosting).
+  outputFileTracingIncludes: { "/**": ["./data/seed.json"] },
   images: {
     remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com" }],
   },

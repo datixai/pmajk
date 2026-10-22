@@ -48,7 +48,11 @@ export async function readUsers(): Promise<User[]> {
       passwordHash: hashPassword(password),
       createdAt: new Date().toISOString(),
     };
-    await writeUsers([first]);
+    try {
+      await writeUsers([first]);
+    } catch {
+      // Read-only hosting: keep the env admin in memory only.
+    }
     return [first];
   }
 }
