@@ -2,8 +2,9 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { byOrder, readDB } from "@/lib/store";
 
-// Content is edited live from the admin panel, so pages render per request.
-export const dynamic = "force-dynamic";
+// Public pages are pre-built and served from the CDN cache. They refresh at
+// most every 5 minutes, and immediately after an admin saves (revalidatePath).
+export const revalidate = 300;
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const db = await readDB();

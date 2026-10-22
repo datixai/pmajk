@@ -2,12 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Plus_Jakarta_Sans, Noto_Nastaliq_Urdu } from "next/font/google";
 import "./globals.css";
 
-// Every page is rendered per request so it receives a fresh CSP nonce.
-export const dynamic = "force-dynamic";
-
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"] });
 const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], axes: ["opsz"], style: ["normal", "italic"] });
-const nastaliq = Noto_Nastaliq_Urdu({ variable: "--font-nastaliq", subsets: ["arabic"], weight: ["400", "700"] });
+const nastaliq = Noto_Nastaliq_Urdu({ variable: "--font-nastaliq", subsets: ["arabic"], weight: ["400", "700"], preload: false, display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL || "https://ajkpm.gok.pk"),

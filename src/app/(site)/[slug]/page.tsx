@@ -6,6 +6,10 @@ import { PageHero } from "@/components/site/SiteFooter";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export async function generateStaticParams() {
+  return (await readDB()).pages.filter((p) => p.slug !== "ajk-at-a-glance").map((p) => ({ slug: p.slug }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = (await readDB()).pages.find((p) => p.slug === slug);

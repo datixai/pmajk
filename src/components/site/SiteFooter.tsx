@@ -168,7 +168,7 @@ export function SiteFooter({ settings, links }: { settings: Settings; links: Lin
 export function PageHero({ eyebrow, title, text, image }: { eyebrow: string; title: string; text?: string; image?: string }) {
   return (
     <section className="relative isolate overflow-hidden bg-pine-950 pb-16 pt-40 text-center text-white sm:pb-20 sm:pt-48">
-      {image && <Image src={image} alt="" fill priority sizes="100vw" className="-z-20 object-cover opacity-30" />}
+      {image && <Image src={image} alt="" fill priority quality={70} sizes="100vw" className="-z-20 object-cover opacity-30" />}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-pine-975/80 via-pine-950/70 to-pine-950" />
       <div className="container-pm flex flex-col items-center">
         <p className="eyebrow text-gold-300 animate-rise">{eyebrow}</p>

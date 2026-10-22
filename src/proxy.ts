@@ -54,11 +54,20 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     {
-      source: "/((?!_next/static|_next/image|images/|media/|chinar-leaf.svg|icon.svg|robots.txt|sitemap.xml|.well-known).*)",
+      // Admin only (plus scanner probes): public pages are static and use the CSP from next.config.
+      source: "/admin/:path*",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
       ],
     },
+    "/wp-admin/:path*",
+    "/wp-login.php",
+    "/xmlrpc.php",
+    "/wp-json/:path*",
+    "/wp-content/plugins/:path*",
+    "/phpmyadmin/:path*",
+    "/.env",
+    "/.git/:path*",
   ],
 };

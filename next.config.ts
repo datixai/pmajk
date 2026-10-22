@@ -12,6 +12,26 @@ const securityHeaders = [
     : []),
 ];
 
+const isDev = process.env.NODE_ENV === "development";
+
+// Public pages are static (served from cache), so they use a fixed policy.
+// The admin panel gets a stricter per-request nonce policy in src/proxy.ts.
+const publicCsp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://i.ytimg.com",
+  "font-src 'self'",
+  "frame-src https://www.youtube-nocookie.com",
+  `connect-src 'self'${isDev ? " ws:" : ""}`,
+  "media-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  ...(isDev ? [] : ["upgrade-insecure-requests"]),
+].join("; ");
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
@@ -19,12 +39,19 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: { "/**": ["./data/seed.json"] },
   images: {
     remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com" }],
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2592000,
+    qualities: [70, 75],
   },
   experimental: {
     serverActions: { bodySizeLimit: "12mb" },
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/((?!admin).*)", headers: [{ key: "Content-Security-Policy", value: publicCsp }] },
+      { source: "/images/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=2592000, stale-while-revalidate=86400" }] },
+    ];
   },
   async rewrites() {
     // Browsers still ask for /favicon.ico; serve the chinar leaf icon.

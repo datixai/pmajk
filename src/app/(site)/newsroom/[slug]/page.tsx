@@ -11,6 +11,10 @@ import { ShareButtons } from "@/components/site/ShareButtons";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export async function generateStaticParams() {
+  return (await readDB()).news.filter((n) => n.published).map((n) => ({ slug: n.slug }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const n = (await readDB()).news.find((x) => x.slug === slug && x.published);
